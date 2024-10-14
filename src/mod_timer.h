@@ -23,11 +23,12 @@ typedef struct
 
 typedef struct
 {
+    uint32_t timerVal;
     bool sleepFlag;
     vector<TimerEntry> timerEntries; // Dynamic array of timer entries
 } mod_timer_data;
 
-void MOD_TIMER_Init();
+void MOD_TIMER_Init(uint32_t timerVal);
 void MOD_TIMER_Task();
 bool MOD_TIMER_HandlerRegister(uint32_t time, TimerCallback callback, TimerMode mode); // Register new timer
 

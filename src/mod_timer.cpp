@@ -11,11 +11,12 @@ void IRAM_ATTR onTimer()
     portEXIT_CRITICAL_ISR(&timerMux);
 }
 
-void MOD_TIMER_Init()
+void MOD_TIMER_Init(uint32_t timerVal)
 {
+    modTimerDt.timerVal = timerVal;
     timer = timerBegin(0, 80, true);
     timerAttachInterrupt(timer, &onTimer, true);
-    timerAlarmWrite(timer, 200000, true); // 200ms interval
+    timerAlarmWrite(timer, timerVal * 1000, true); // 200ms interval
     timerAlarmEnable(timer);
     modTimerDt.sleepFlag = true;
     modTimerDt.timerEntries.clear(); // Initialize an empty timer entry list
@@ -29,7 +30,7 @@ void MOD_TIMER_Task()
     portENTER_CRITICAL(&timerMux);
     for (auto it = modTimerDt.timerEntries.begin(); it != modTimerDt.timerEntries.end();)
     {
-        it->remainingTime -= 200;
+        it->remainingTime -= modTimerDt.timerVal;
         if (it->remainingTime == 0)
         {
             it->callback();
@@ -51,7 +52,7 @@ void MOD_TIMER_Task()
 // Register a new timer callback
 bool MOD_TIMER_HandlerRegister(uint32_t time, TimerCallback callback, TimerMode mode)
 {
-    if (time % 200 != 0)
+    if (time % modTimerDt.timerVal != 0)
         return false;
 
     portENTER_CRITICAL(&timerMux);
