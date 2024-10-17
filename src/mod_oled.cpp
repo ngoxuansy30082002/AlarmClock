@@ -58,9 +58,13 @@ void MOD_OLED_Init()
     display.clearDisplay();
     initStartTime = millis();
     modOledDt.state = OLED_INIT;
+    modOledDt.sleepFlag = false;
 }
 void MOD_OLED_Task()
 {
+    if (modOledDt.sleepFlag && (modOledDt.state != OLED_INIT))
+        return;
+
     switch (modOledDt.state)
     {
     case OLED_INIT:
@@ -94,6 +98,17 @@ void MOD_OLED_Task()
     }
 }
 
+void MOD_OLED_wakeUp()
+{
+    modOledDt.sleepFlag = false;
+}
+
+void MOD_OLED_EnterState(OLED_display_state_t state)
+{
+    modOledDt.state = state;
+    MOD_OLED_wakeUp();
+}
+
 static void _OLED_displayInitAnimate()
 {
     display.clearDisplay();
@@ -116,7 +131,7 @@ static void _OLED_displayHome()
     display.setTextSize(1);
     display.setTextColor(WHITE);
     display.setCursor(0, 0);
-    display.printf("%uoC   %u%%", 30, 60);
+    display.printf("%uoC   %u%%", modMbRtuDt.tempSensor.value, modMbRtuDt.humSensor.value);
     display.setCursor(106, 1);
     display.drawRect(100, 0, 28, 10, 1);
     display.printf("%u%%", 90);
@@ -135,6 +150,7 @@ static void _OLED_displayHome()
     display.setCursor(27, 55);
     display.printf("Alarm: %02u:%02u", 5, 0);
     display.display();
+    modOledDt.sleepFlag = true;
 }
 static void _OLED_displayMenu()
 {
@@ -152,6 +168,7 @@ static void _OLED_displayMenu()
     display.print(">");
 
     display.display();
+    modOledDt.sleepFlag = true;
 }
 static void _OLED_displaySetCurTime()
 {
@@ -169,6 +186,7 @@ static void _OLED_displaySetCurTime()
         display.drawRect(75, 50, 30, 2, 1);
 
     display.display();
+    modOledDt.sleepFlag = true;
 }
 static void _OLED_displaySetAlarmTime()
 {
@@ -186,4 +204,5 @@ static void _OLED_displaySetAlarmTime()
         display.drawRect(75, 50, 30, 2, 1);
 
     display.display();
+    modOledDt.sleepFlag = true;
 }

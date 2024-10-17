@@ -19,18 +19,18 @@ void IRAM_ATTR _handleInterruptBtnMode()
         {
         case MODE_HOME:
             modGpioDt.mode = MODE_MENU;
-            modOledDt.state = OLED_DISPLAY_MENU;
+            MOD_OLED_EnterState(OLED_DISPLAY_MENU);
             break;
         case MODE_MENU:
             modGpioDt.mode = MODE_SET_TIME;
             if (modGpioDt.timeType == 0)
-                modOledDt.state = OLED_DISPLAY_SET_CUR_TIME;
+                MOD_OLED_EnterState(OLED_DISPLAY_SET_CUR_TIME);
             else
-                modOledDt.state = OLED_DISPLAY_SET_ALARM_TIME;
-                break;
+                MOD_OLED_EnterState(OLED_DISPLAY_SET_ALARM_TIME);
+            break;
         case MODE_SET_TIME:
             modGpioDt.mode = MODE_HOME;
-            modOledDt.state = OLED_DISPLAY_HOME;
+            MOD_OLED_EnterState(OLED_DISPLAY_HOME);
             break;
         default:
             break;
@@ -64,6 +64,7 @@ void IRAM_ATTR _handleInterruptBtnUp()
             }
         }
         lastInterruptTimeUp = currentTime; // Cập nhật thời gian lần nhấn nút
+        MOD_OLED_wakeUp();
     }
 }
 
@@ -92,6 +93,7 @@ void IRAM_ATTR _handleInterruptBtnDown()
             }
         }
         lastInterruptTimeDown = currentTime; // Cập nhật thời gian lần nhấn nút
+        MOD_OLED_wakeUp();
     }
 }
 
@@ -102,6 +104,7 @@ void IRAM_ATTR _handleInterruptBtnChange()
     {
         modGpioDt.timeType = (time_type_t)(modGpioDt.timeType ^ 1);
         lastInterruptTimeNext = currentTime; // Cập nhật thời gian lần nhấn nút
+        MOD_OLED_wakeUp();
     }
 }
 
@@ -122,7 +125,7 @@ void MOD_GPIO_Init()
 }
 void MOD_GPIO_Task()
 {
-    char str[100];
-    sprintf(str, "mode: %u, timeType: %u, hour: %u, minute: %u, ", modGpioDt.mode, modGpioDt.timeType, modGpioDt.hour, modGpioDt.minute);
-    Serial.println(str);
+    // char str[100];
+    // sprintf(str, "mode: %u, timeType: %u, hour: %u, minute: %u, ", modGpioDt.mode, modGpioDt.timeType, modGpioDt.hour, modGpioDt.minute);
+    // Serial.println(str);
 }

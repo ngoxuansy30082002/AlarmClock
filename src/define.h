@@ -5,9 +5,12 @@
 #include <Adafruit_SSD1306.h>
 #include <functional>
 #include <vector>
+#include <ModbusMaster.h>
 #include "mod_gpio.h"
 #include "mod_timer.h"
 #include "mod_oled.h"
+#include "mod_modbusRTU.h"
+
 
 #define PIN_BTN_MODE 0
 #define PIN_BTN_UP 1
@@ -19,3 +22,4 @@
 #define PIN_OLED_DC 5
 #define PIN_OLED_CS 4
 #define PIN_OLED_RESET 8
+#define PIN_MBRTU_TRIS 10

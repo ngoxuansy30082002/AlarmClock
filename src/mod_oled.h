@@ -16,11 +16,14 @@ typedef enum
 
 typedef struct
 {
+    bool sleepFlag;
     OLED_display_state_t state;
 } mod_oled_data;
 
 void MOD_OLED_Init();
 void MOD_OLED_Task();
+void MOD_OLED_EnterState(OLED_display_state_t state);
+void MOD_OLED_wakeUp();
 extern mod_oled_data modOledDt;
 
 #endif /* MOD_OLED_H */
