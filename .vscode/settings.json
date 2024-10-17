@@ -1,5 +1,5 @@
 {
-    "idf.portWin": "COM14",
+    "idf.portWin": "COM12",
     "files.associations": {
         "functional": "cpp"
     }

@@ -5,7 +5,7 @@
 
 typedef enum
 {
-    MODE_NORMAL = 0,
+    MODE_HOME = 0,
     MODE_MENU,
     MODE_SET_TIME,
 } mod_t;

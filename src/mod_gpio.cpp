@@ -2,7 +2,7 @@
 
 volatile mod_gpio_data modGpioDt;
 
-#define DEBOUNCE_DELAY 150 // Thời gian debounce (ms)
+#define DEBOUNCE_DELAY 200 // Thời gian debounce (ms)
 
 // Khai báo biến lưu thời gian lần nhấn cuối
 volatile unsigned long lastInterruptTimeMode = 0;
@@ -17,14 +17,20 @@ void IRAM_ATTR _handleInterruptBtnMode()
     {
         switch (modGpioDt.mode)
         {
-        case MODE_NORMAL:
+        case MODE_HOME:
             modGpioDt.mode = MODE_MENU;
+            modOledDt.state = OLED_DISPLAY_MENU;
             break;
         case MODE_MENU:
             modGpioDt.mode = MODE_SET_TIME;
-            break;
+            if (modGpioDt.timeType == 0)
+                modOledDt.state = OLED_DISPLAY_SET_CUR_TIME;
+            else
+                modOledDt.state = OLED_DISPLAY_SET_ALARM_TIME;
+                break;
         case MODE_SET_TIME:
-            modGpioDt.mode = MODE_NORMAL;
+            modGpioDt.mode = MODE_HOME;
+            modOledDt.state = OLED_DISPLAY_HOME;
             break;
         default:
             break;
@@ -89,7 +95,7 @@ void IRAM_ATTR _handleInterruptBtnDown()
     }
 }
 
-void IRAM_ATTR _handleInterruptBtnNext()
+void IRAM_ATTR _handleInterruptBtnChange()
 {
     unsigned long currentTime = millis();
     if (currentTime - lastInterruptTimeNext > DEBOUNCE_DELAY)
@@ -104,14 +110,14 @@ void MOD_GPIO_Init()
     pinMode(PIN_BTN_MODE, INPUT_PULLUP);
     pinMode(PIN_BTN_UP, INPUT_PULLUP);
     pinMode(PIN_BTN_DOWN, INPUT_PULLUP);
-    pinMode(PIN_BTN_NEXT, INPUT_PULLUP);
+    pinMode(PIN_BTN_CHANGE, INPUT_PULLUP);
 
     attachInterrupt(PIN_BTN_MODE, _handleInterruptBtnMode, FALLING);
     attachInterrupt(PIN_BTN_UP, _handleInterruptBtnUp, FALLING);
     attachInterrupt(PIN_BTN_DOWN, _handleInterruptBtnDown, FALLING);
-    attachInterrupt(PIN_BTN_NEXT, _handleInterruptBtnNext, FALLING);
+    attachInterrupt(PIN_BTN_CHANGE, _handleInterruptBtnChange, FALLING);
 
-    modGpioDt.mode = MODE_NORMAL;
+    modGpioDt.mode = MODE_HOME;
     // pinMode(LED_PIN, OUTPUT);
 }
 void MOD_GPIO_Task()
