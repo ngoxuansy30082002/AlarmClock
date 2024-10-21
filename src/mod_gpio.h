@@ -7,7 +7,8 @@ typedef enum
 {
     MODE_HOME = 0,
     MODE_MENU,
-    MODE_SET_TIME,
+    MODE_SET_CUR_TIME,
+    MODE_SET_ALARM_TIME,
 } mod_t;
 
 typedef enum

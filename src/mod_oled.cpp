@@ -71,7 +71,7 @@ void MOD_OLED_Task()
     {
         _OLED_displayInitAnimate();
         unsigned long currentTime = millis();
-        if (currentTime - initStartTime > 2000)
+        if (currentTime - initStartTime > 3000)
             modOledDt.state = OLED_DISPLAY_HOME;
         break;
     }
@@ -145,10 +145,10 @@ static void _OLED_displayHome()
     display.drawPixel(126, 8, 1);
     display.setTextSize(3);
     display.setCursor(20, 20);
-    display.printf("%02u:%02u", 20, 45);
+    display.printf("%02u:%02u", modRtc_Dt.cur_Time.hour, modRtc_Dt.cur_Time.minute);
     display.setTextSize(1);
     display.setCursor(27, 55);
-    display.printf("Alarm: %02u:%02u", 5, 0);
+    display.printf("Alarm: %02u:%02u", modRtc_Dt.alarm_Time.hour, modRtc_Dt.alarm_Time.minute);
     display.display();
     modOledDt.sleepFlag = true;
 }
@@ -179,7 +179,7 @@ static void _OLED_displaySetCurTime()
     display.print("1. Set current time");
     display.setTextSize(3);
     display.setCursor(20, 20);
-    display.printf("%02u:%02u", 20, 45);
+    display.printf("%02u:%02u", modGpioDt.hour, modGpioDt.minute);
     if (modGpioDt.timeType == 0)
         display.drawRect(20, 50, 30, 2, 1);
     else
@@ -197,7 +197,7 @@ static void _OLED_displaySetAlarmTime()
     display.print("2. Set alarm time");
     display.setTextSize(3);
     display.setCursor(20, 20);
-    display.printf("%02u:%02u", 20, 45);
+    display.printf("%02u:%02u", modGpioDt.hour, modGpioDt.minute);
     if (modGpioDt.timeType == 0)
         display.drawRect(20, 50, 30, 2, 1);
     else

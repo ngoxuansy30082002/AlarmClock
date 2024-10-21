@@ -6,20 +6,23 @@
 #include <functional>
 #include <vector>
 #include <ModbusMaster.h>
+#include <RTClib.h>
 #include "mod_gpio.h"
 #include "mod_timer.h"
 #include "mod_oled.h"
 #include "mod_modbusRTU.h"
+#include "mod_RTC.h"
 
-
-#define PIN_BTN_MODE 0
+#define PIN_BTN_MODE 10
 #define PIN_BTN_UP 1
-#define PIN_BTN_DOWN 2
+#define PIN_BTN_DOWN 8
 #define PIN_BTN_CHANGE 3
-// #define LED_PIN 2
+#define LED_PIN 0
 #define PIN_OLED_MOSI 7
 #define PIN_OLED_CLK 6
-#define PIN_OLED_DC 5
-#define PIN_OLED_CS 4
-#define PIN_OLED_RESET 8
-#define PIN_MBRTU_TRIS 10
+#define PIN_OLED_DC 4
+#define PIN_OLED_CS 5
+#define PIN_OLED_RESET -1
+#define PIN_MBRTU_TRIS 9
+#define PIN_RTC_SDA 18
+#define PIN_RTC_SCL 19

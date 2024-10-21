@@ -22,15 +22,31 @@ void IRAM_ATTR _handleInterruptBtnMode()
             MOD_OLED_EnterState(OLED_DISPLAY_MENU);
             break;
         case MODE_MENU:
-            modGpioDt.mode = MODE_SET_TIME;
             if (modGpioDt.timeType == 0)
+            {
+                modGpioDt.mode = MODE_SET_CUR_TIME;
+                modGpioDt.hour = modRtc_Dt.cur_Time.hour;
+                modGpioDt.minute = modRtc_Dt.cur_Time.minute;
                 MOD_OLED_EnterState(OLED_DISPLAY_SET_CUR_TIME);
+            }
             else
+            {
+                modGpioDt.hour = modRtc_Dt.alarm_Time.hour;
+                modGpioDt.minute = modRtc_Dt.alarm_Time.minute;
+                modGpioDt.mode = MODE_SET_ALARM_TIME;
                 MOD_OLED_EnterState(OLED_DISPLAY_SET_ALARM_TIME);
+            }
             break;
-        case MODE_SET_TIME:
+        case MODE_SET_CUR_TIME:
             modGpioDt.mode = MODE_HOME;
             MOD_OLED_EnterState(OLED_DISPLAY_HOME);
+            MOD_TIMER_HandlerRegister(200, MOD_RTC_SetCustomDateTime, TIMER_ONCE);
+            break;
+        case MODE_SET_ALARM_TIME:
+            modGpioDt.mode = MODE_HOME;
+            MOD_OLED_EnterState(OLED_DISPLAY_HOME);
+            modRtc_Dt.alarm_Time.hour = modGpioDt.hour;
+            modRtc_Dt.alarm_Time.minute = modGpioDt.minute;
             break;
         default:
             break;
@@ -44,23 +60,20 @@ void IRAM_ATTR _handleInterruptBtnUp()
     unsigned long currentTime = millis();
     if (currentTime - lastInterruptTimeUp > DEBOUNCE_DELAY)
     {
-        if (modGpioDt.mode == MODE_SET_TIME)
+        if (modGpioDt.timeType == MINUTE)
         {
-            if (modGpioDt.timeType == MINUTE)
+            modGpioDt.minute++;
+            if (modGpioDt.minute >= 60)
             {
-                modGpioDt.minute++;
-                if (modGpioDt.minute >= 60)
-                {
-                    modGpioDt.minute = 0;
-                }
+                modGpioDt.minute = 0;
             }
-            else
+        }
+        else
+        {
+            modGpioDt.hour++;
+            if (modGpioDt.hour >= 24)
             {
-                modGpioDt.hour++;
-                if (modGpioDt.hour >= 24)
-                {
-                    modGpioDt.hour = 0;
-                }
+                modGpioDt.hour = 0;
             }
         }
         lastInterruptTimeUp = currentTime; // Cập nhật thời gian lần nhấn nút
@@ -73,23 +86,20 @@ void IRAM_ATTR _handleInterruptBtnDown()
     unsigned long currentTime = millis();
     if (currentTime - lastInterruptTimeDown > DEBOUNCE_DELAY)
     {
-        if (modGpioDt.mode == MODE_SET_TIME)
+        if (modGpioDt.timeType == MINUTE)
         {
-            if (modGpioDt.timeType == MINUTE)
+            modGpioDt.minute--;
+            if (modGpioDt.minute < 0)
             {
-                modGpioDt.minute--;
-                if (modGpioDt.minute < 0)
-                {
-                    modGpioDt.minute = 59;
-                }
+                modGpioDt.minute = 59;
             }
-            else
+        }
+        else
+        {
+            modGpioDt.hour--;
+            if (modGpioDt.hour < 0)
             {
-                modGpioDt.hour--;
-                if (modGpioDt.hour < 0)
-                {
-                    modGpioDt.hour = 23;
-                }
+                modGpioDt.hour = 23;
             }
         }
         lastInterruptTimeDown = currentTime; // Cập nhật thời gian lần nhấn nút
