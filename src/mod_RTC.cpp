@@ -6,11 +6,11 @@ mod_RTC_Data modRtc_Dt;
 
 void MOD_RTC_SetCustomDateTime()
 {
-    if (rtc.isrunning())
-    {
-        DateTime customDateTime(2024, 10, 21, modGpioDt.hour, modGpioDt.minute, 0);
-        rtc.adjust(customDateTime);
-    }
+    // if (rtc.isrunning())
+    // {
+    DateTime customDateTime(2024, 10, 21, modGpioDt.hour, modGpioDt.minute, 0);
+    rtc.adjust(customDateTime);
+    // }
     MOD_RTC_Task();
 }
 void MOD_RTC_Init()
@@ -27,4 +27,9 @@ void MOD_RTC_Task()
     modRtc_Dt.cur_Time.hour = now.hour();
     modRtc_Dt.cur_Time.minute = now.minute();
     MOD_OLED_wakeUp(); // mới thêm vô cẩn thận chỗ này
+    if (modRtc_Dt.alarm_Time.hour == modRtc_Dt.cur_Time.hour && modRtc_Dt.alarm_Time.minute == modRtc_Dt.cur_Time.minute)
+    {
+        MOD_OLED_EnterState(OLED_DISPLAY_ALARM);
+        startDimming();
+    }
 }

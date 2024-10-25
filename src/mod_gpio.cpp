@@ -116,11 +116,13 @@ void IRAM_ATTR _handleInterruptBtnChange()
         lastInterruptTimeNext = currentTime; // Cập nhật thời gian lần nhấn nút
         MOD_OLED_wakeUp();
 
-        if(isDimming()){
+        if (dimmLed_Dt.isDimming == true)
+        {
+            dimmLed_Dt.isDimming = false;
             turn_off_led();
+            MOD_OLED_EnterState(OLED_DISPLAY_HOME);
         }
     }
-
 }
 
 void MOD_GPIO_Init()

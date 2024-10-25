@@ -15,7 +15,6 @@ static inline void Rx_Tris()
 
 void MOD_MODBUSRTU_Init()
 {
-    Serial.begin(9600);
     pinMode(PIN_MBRTU_TRIS, OUTPUT);
     node.preTransmission(Tx_Tris); // Callback for configuring RS-485 Transreceiver correctly
     node.postTransmission(Rx_Tris);

@@ -51,6 +51,12 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "cinttypes": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "mod_gpio.h": "c",
+        "dimming_led.h": "c",
+        "adafruit_gfx.h": "c",
+        "adafruit_ssd1306.h": "c",
+        "arduino.h": "c",
+        "mod_adc.h": "c"
     }
 }
