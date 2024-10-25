@@ -12,6 +12,7 @@
 #include "mod_oled.h"
 #include "mod_modbusRTU.h"
 #include "mod_RTC.h"
+#include "dimming_led.h"
 
 #define PIN_BTN_MODE 10
 #define PIN_BTN_UP 1

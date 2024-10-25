@@ -115,7 +115,12 @@ void IRAM_ATTR _handleInterruptBtnChange()
         modGpioDt.timeType = (time_type_t)(modGpioDt.timeType ^ 1);
         lastInterruptTimeNext = currentTime; // Cập nhật thời gian lần nhấn nút
         MOD_OLED_wakeUp();
+
+        if(isDimming()){
+            turn_off_led();
+        }
     }
+
 }
 
 void MOD_GPIO_Init()

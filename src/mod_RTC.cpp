@@ -26,4 +26,5 @@ void MOD_RTC_Task()
     DateTime now = rtc.now();
     modRtc_Dt.cur_Time.hour = now.hour();
     modRtc_Dt.cur_Time.minute = now.minute();
+    MOD_OLED_wakeUp(); // mới thêm vô cẩn thận chỗ này
 }
